@@ -1,145 +1,142 @@
-# 🎬 Sentiment Analysis of *The Exorcist* Series Reviews
+<img width="1148" height="691" alt="image" src="https://github.com/user-attachments/assets/c657a17c-5e41-4948-a551-ca4abba3a44b" /><img width="1148" height="691" alt="image" src="https://github.com/user-attachments/assets/0297cf11-2d36-4fa8-9996-b1e88a9625b2" />🎬 Sentiment Analysis of The Exorcist Series Reviews
 
-This project is a submission for an **NLP internship assignment**. It demonstrates an **end-to-end sentiment analysis workflow** — from **scraping raw reviews** to **preprocessing, template engineering, and model interaction** with Hugging Face via **LangChain**.
+TL;DR: An end-to-end NLP pipeline analyzing Rotten Tomatoes reviews of The Exorcist. Built with LangChain + Hugging Face to compare prompt strategies (direct vs. role-playing), showcasing how prompting affects model reliability.
 
-The core deliverable is a **visual flowchart** illustrating the project lifecycle, complemented by this repository that houses the **source code, processed dataset, prompt templates, and detailed documentation**.
+🖼️ Project Workflow
 
----
 
-## 📂 Repository Structure
+(see docs/NLP Analysis of _The Exorcist_ Series Reviews.pdf
+ for full detail)
 
-```
+📂 Repository Structure
 .
-├── .gitignore
-├── LICENSE
+├── preprocessing/                     # Notebooks for scraping & cleaning
+├── src/                               # Core Python scripts
+├── templates/                         # Prompt templates
+├── data/                              # Final dataset
+├── docs/                              # Visuals & reports
+├── requirements.txt
 ├── README.md
-├── app.py                        # Main application (runs sentiment analysis)
-├── create_templates.py           # Generates and saves LangChain prompt templates
-├── data.py                       # Loads raw reviews & applies preprocessing
-├── processed_data.csv            # Final cleaned & lemmatized dataset
-├── requirements.txt              # Project dependencies
-├── template_1.json               # Prompt template (direct strategy)
-├── template_2.json               # Prompt template (role-playing strategy)
-├── flowchart.pdf                 # Visual lifecycle flowchart (main submission)
-└── evaluation_and_troubleshooting.md # Written evaluation & troubleshooting
-```
+└── LICENSE
 
----
+🕸️ Data Collection & Preprocessing
 
-## ⚙️ Project Workflow
+Notebooks inside preprocessing/
+:
 
-1. **Data Collection & Cleaning**
+web-scraping-movie-reviews.ipynb → Scrapes The Exorcist reviews from Rotten Tomatoes.
 
-   * Scraped raw review data for *The Exorcist* series.
-   * Preprocessed using **NLTK** & **TextBlob** for tokenization, lemmatization, and spelling correction.
-   * Exported cleaned dataset → `processed_data.csv`.
+sentiment-analysis-of-the-exorcist-reviews.ipynb → Cleans and preprocesses the raw text (lowercasing, stopwords, punctuation, tokenization, lemmatization).
 
-2. **Prompt Engineering with LangChain**
+Final output: data/processed_data.csv
 
-   * Designed two prompting strategies:
+⚙️ Workflow
 
-     * **Prompt 1:** Direct, concise instructions.
-     * **Prompt 2:** Role-playing, persona-based instructions.
-   * Saved as reusable `.json` templates.
+Scraping → Collect reviews from Rotten Tomatoes.
 
-3. **Model Interaction**
+Preprocessing → Clean & normalize text.
 
-   * Integrated with Hugging Face Hub model: **meta-llama/Llama-3.1-8B-Instruct**.
-   * LangChain orchestrates prompt-template loading, input handling, and inference.
+Prompt Engineering → Two strategies:
 
-4. **Evaluation & Troubleshooting**
+Direct prompt (concise).
 
-   * Compared outputs from both strategies.
-   * Documented differences & error cases in [`evaluation_and_troubleshooting.md`](evaluation_and_troubleshooting.md).
+Role-playing prompt (persona-based).
 
----
+Model Interaction → Hugging Face LLM: meta-llama/Llama-3.1-8B-Instruct.
 
-## 📊 Final Output Analysis
+Evaluation & Troubleshooting → Compare outputs, document errors, assess hallucinations.
+
+💻 Example Code
+Preprocessing (src/data.py)
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+import re
+
+def clean_text(text):
+    text = re.sub(r"http\S+|www\S+", "", text)   # remove URLs
+    tokens = word_tokenize(text.lower())         # lowercase + tokenize
+    lemmatizer = WordNetLemmatizer()
+    cleaned = [lemmatizer.lemmatize(t) for t in tokens if t.isalpha()]
+    return " ".join(cleaned)
+
+Sentiment Inference (src/app.py)
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
+import json
+
+# Load prompt
+with open("templates/template_1.json") as f:
+    prompt_dict = json.load(f)
+prompt = PromptTemplate(**prompt_dict)
+
+# Run LLM chain
+chain = LLMChain(llm=hf_llm, prompt=prompt)
+review_text = "brings,back,,original,horror,,73"
+response = chain.run({"input": review_text})
+
+print("Sentiment result:", response)
+
+📊 Example Output
 
 Sample Review:
 
-```
 "brings,back,,original,horror,,73"
-```
 
-**Result from Prompt 1 (Direct): ✅ Correct**
 
-> Sentiment: **POSITIVE**
-> Reasoning: Nostalgic reference to “original horror” implies enthusiasm and enjoyment.
+Direct Prompt ✅
 
-**Result from Prompt 2 (Role-Playing): ❌ Incorrect**
+Sentiment: POSITIVE
+Reason: Nostalgic reference to “original horror” implies enthusiasm.
 
-> Sentiment: **NEGATIVE**
-> Reasoning: Over-interpreted punctuation and fabricated a sense of disappointment.
 
-👉 This comparison highlights how **prompt complexity can introduce hallucination**, and why **evaluation of prompt design** is crucial in NLP workflows.
+Role-Playing Prompt ❌
 
----
+Sentiment: NEGATIVE
+Reason: Over-interpreted punctuation → hallucinated disappointment.
 
-## 🚀 How to Run
 
-1. **Clone the Repository**
+👉 Demonstrates how prompt design directly impacts LLM reliability.
 
-   ```bash
-   git clone <your-repository-url>
-   cd <your-repository-name>
-   ```
+🚀 How to Run
+git clone https://github.com/lakshayknows/sentiment-analysis-the_exorcist_series.git
+cd sentiment-analysis-the_exorcist_series
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 
-2. **Set Up a Virtual Environment (Recommended)**
 
-   ```bash
-   python -m venv venv
-   source venv/bin/activate     # On Windows: venv\Scripts\activate
-   ```
+Add Hugging Face API token in .env:
 
-3. **Install Dependencies**
+HUGGINGFACEHUB_API_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
 
-   ```bash
-   pip install -r requirements.txt
-   ```
 
-4. **Set Up API Credentials**
+Run:
 
-   * Create a `.env` file in the root directory:
+python src/app.py
 
-     ```ini
-     HUGGINGFACEHUB_API_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
-     ```
+🛠️ Tools & Libraries
 
-5. **Run the Application**
+Python
 
-   ```bash
-   python app.py
-   ```
+pandas, NLTK, TextBlob → preprocessing
 
----
+LangChain → prompt orchestration
 
-## 🛠️ Tools & Libraries Used
+Hugging Face Hub → meta-llama LLM
 
-* **Python**
-* **pandas** → Data manipulation & preprocessing
-* **NLTK & TextBlob** → Tokenization, lemmatization, spelling correction
-* **LangChain** → Prompt engineering & orchestration
-* **Hugging Face Hub** → Pre-trained LLM (meta-llama/Llama-3.1-8B-Instruct)
-* **Napkin.ai** → Visual flowchart for workflow illustration
+Napkin.ai → flowchart design
 
----
+🎯 Key Takeaways
 
-## 🎯 Key Takeaways
+Direct prompts → stable results
 
-* Even simple **prompt changes** can drastically affect model outputs.
-* Role-playing prompts may **introduce bias or hallucination** in classification tasks.
-* Clean preprocessing and controlled prompt strategies lead to more **reliable sentiment predictions**.
+Persona prompts → risk of hallucinations
 
----
+Preprocessing + prompt strategy → better reliability
 
-## 📜 License
+📜 License
 
-This project is licensed under the terms of the [MIT License](LICENSE).
+Licensed under the MIT License
+.
 
----
-
-✨ *A spooky dataset, a haunted model, and a few tricks of NLP sorcery later — we learned how fragile and fascinating prompt-based sentiment analysis can be.* 👻
-
----
-
+✨ From raw web-scraped chaos to model-guided clarity — an exorcism of noisy data into sentiment truth. 👻
