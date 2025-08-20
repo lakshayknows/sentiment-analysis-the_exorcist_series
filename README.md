@@ -1,7 +1,3 @@
-Got it 🚀 Let’s turn your README into something polished, engaging, and internship-ready — while still showing off the technical depth of your project. Here’s an enhanced version that adds clarity, structure, and some flair without overloading:
-
----
-
 # 🎬 Sentiment Analysis of *The Exorcist* Series Reviews
 
 This project is a submission for an **NLP internship assignment**. It demonstrates an **end-to-end sentiment analysis workflow** — from **scraping raw reviews** to **preprocessing, template engineering, and model interaction** with Hugging Face via **LangChain**.
@@ -147,4 +143,3 @@ This project is licensed under the terms of the [MIT License](LICENSE).
 
 ---
 
-Would you like me to also **add sample code snippets** (like `app.py` execution or template creation) in the README so it looks even more hands-on for reviewers?
