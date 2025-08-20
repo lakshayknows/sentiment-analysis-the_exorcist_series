@@ -1,97 +1,150 @@
-Sentiment Analysis of "The Exorcist" Series Reviews
-This project is a submission for an NLP internship assignment. It demonstrates a complete, end-to-end workflow for a sentiment analysis task, including data scraping, extensive preprocessing, and prompt engineering with LangChain to interact with a large language model from the Hugging Face Hub.
+Got it 🚀 Let’s turn your README into something polished, engaging, and internship-ready — while still showing off the technical depth of your project. Here’s an enhanced version that adds clarity, structure, and some flair without overloading:
 
-The primary submission is a visual flowchart that details the project's lifecycle, accompanied by this repository containing all the source code and documentation.
+---
 
-📂 Repository Structure
+# 🎬 Sentiment Analysis of *The Exorcist* Series Reviews
+
+This project is a submission for an **NLP internship assignment**. It demonstrates an **end-to-end sentiment analysis workflow** — from **scraping raw reviews** to **preprocessing, template engineering, and model interaction** with Hugging Face via **LangChain**.
+
+The core deliverable is a **visual flowchart** illustrating the project lifecycle, complemented by this repository that houses the **source code, processed dataset, prompt templates, and detailed documentation**.
+
+---
+
+## 📂 Repository Structure
+
+```
 .
 ├── .gitignore
 ├── LICENSE
 ├── README.md
-├── app.py
-├── create_templates.py
-├── data.py
-├── processed_data.csv
-├── requirements.txt
-├── template_1.json
-├── template_2.json
-├── flowchart.pdf
-└── evaluation_and_troubleshooting.md
+├── app.py                        # Main application (runs sentiment analysis)
+├── create_templates.py           # Generates and saves LangChain prompt templates
+├── data.py                       # Loads raw reviews & applies preprocessing
+├── processed_data.csv            # Final cleaned & lemmatized dataset
+├── requirements.txt              # Project dependencies
+├── template_1.json               # Prompt template (direct strategy)
+├── template_2.json               # Prompt template (role-playing strategy)
+├── flowchart.pdf                 # Visual lifecycle flowchart (main submission)
+└── evaluation_and_troubleshooting.md # Written evaluation & troubleshooting
+```
 
-app.py: The main application script that loads the processed data and prompt templates, interacts with the Hugging Face model, and prints the final sentiment analysis results.
+---
 
-data.py: A utility script responsible for loading the raw review data and applying all preprocessing steps.
+## ⚙️ Project Workflow
 
-create_templates.py: A helper script to generate and save the LangChain PromptTemplate objects into reusable JSON files.
+1. **Data Collection & Cleaning**
 
-processed_data.csv: The final, cleaned, and lemmatized dataset that is used as the input for the main application.
+   * Scraped raw review data for *The Exorcist* series.
+   * Preprocessed using **NLTK** & **TextBlob** for tokenization, lemmatization, and spelling correction.
+   * Exported cleaned dataset → `processed_data.csv`.
 
-template_1.json & template_2.json: The saved prompt templates that define the different interaction strategies with the language model.
+2. **Prompt Engineering with LangChain**
 
-requirements.txt: A list of all the Python libraries required to run this project.
+   * Designed two prompting strategies:
 
-flowchart.pdf: The main visual submission detailing the project workflow from start to finish.
+     * **Prompt 1:** Direct, concise instructions.
+     * **Prompt 2:** Role-playing, persona-based instructions.
+   * Saved as reusable `.json` templates.
 
-evaluation_and_troubleshooting.md: A document containing the detailed written analysis for steps 3 (Evaluation) and 4 (Troubleshooting) of the assignment.
+3. **Model Interaction**
 
-📊 Final Output Analysis
-The script was run on a sample review from the processed dataset to demonstrate how different prompting strategies can lead to vastly different interpretations and outputs from the same model (meta-llama/Llama-3.1-8B-Instruct).
+   * Integrated with Hugging Face Hub model: **meta-llama/Llama-3.1-8B-Instruct**.
+   * LangChain orchestrates prompt-template loading, input handling, and inference.
 
-Sample Review: 'brings,back,,original,horror,,73'
+4. **Evaluation & Troubleshooting**
 
--------------------------
-Result from Prompt 1 (Direct):
-A very brief review!
+   * Compared outputs from both strategies.
+   * Documented differences & error cases in [`evaluation_and_troubleshooting.md`](evaluation_and_troubleshooting.md).
 
-The sentiment of this review is: POSITIVE
+---
 
-The reviewer is expressing enthusiasm for something ("brings back original horror") and seems to be referencing a movie or a franchise from the 1970s (mentioned as "73"), implying that it's a nostalgic and enjoyable experience.
--------------------------
+## 📊 Final Output Analysis
 
-Result from Prompt 2 (Role-Playing):
-What a delightfully cryptic review!
+Sample Review:
 
-After some analysis, I'd say this is a BAD review. Here's why:
+```
+"brings,back,,original,horror,,73"
+```
 
-* The reviewer uses three dots (,,) to separate words, which suggests that they're trying to convey a sense of uncertainty or frustration.
-* The phrase "brings back" is typically a positive phrase, but in this context, it's followed by a low score (73) and a somewhat ambiguous sentiment. It implies that the reviewer is not impressed by the movie's ability to bring back the original horror.
-* The lack of descriptive language or specific criticisms makes the review feel vague and unhelpful.
+**Result from Prompt 1 (Direct): ✅ Correct**
 
-Overall, this review seems to suggest that the reviewer was disappointed or underwhelmed by the movie, but they're not providing any concrete reasons why.
+> Sentiment: **POSITIVE**
+> Reasoning: Nostalgic reference to “original horror” implies enthusiasm and enjoyment.
 
-This output clearly shows that the direct prompt led to a correct interpretation, while the more complex persona prompt caused the model to "hallucinate" incorrect reasoning, resulting in a failed classification.
+**Result from Prompt 2 (Role-Playing): ❌ Incorrect**
 
-🚀 How to Run
-1. Clone the Repository
-git clone <your-repository-url>
-cd <your-repository-name>
+> Sentiment: **NEGATIVE**
+> Reasoning: Over-interpreted punctuation and fabricated a sense of disappointment.
 
-2. Set Up a Virtual Environment (Recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+👉 This comparison highlights how **prompt complexity can introduce hallucination**, and why **evaluation of prompt design** is crucial in NLP workflows.
 
-3. Install Dependencies
-pip install -r requirements.txt
+---
 
-4. Set Up Environment Variables
-Create a .env file in the root directory and add your Hugging Face API token:
+## 🚀 How to Run
 
-HUGGINGFACEHUB_API_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
+1. **Clone the Repository**
 
-5. Run the Application
-Execute the main script to see the sentiment analysis in action:
+   ```bash
+   git clone <your-repository-url>
+   cd <your-repository-name>
+   ```
 
-python app.py
+2. **Set Up a Virtual Environment (Recommended)**
 
-🛠️ Tools and Libraries Used
-Python
+   ```bash
+   python -m venv venv
+   source venv/bin/activate     # On Windows: venv\Scripts\activate
+   ```
 
-Pandas: For data manipulation and preprocessing.
+3. **Install Dependencies**
 
-NLTK & TextBlob: For NLP cleaning tasks like tokenization, lemmatization, and spelling correction.
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-LangChain: For orchestrating the interaction with the language model and managing prompts.
+4. **Set Up API Credentials**
 
-Hugging Face Hub: For accessing the pre-trained language model.
+   * Create a `.env` file in the root directory:
 
-Napkin.ai: Used to create the visual flowchart for the final submission.
+     ```ini
+     HUGGINGFACEHUB_API_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
+     ```
+
+5. **Run the Application**
+
+   ```bash
+   python app.py
+   ```
+
+---
+
+## 🛠️ Tools & Libraries Used
+
+* **Python**
+* **pandas** → Data manipulation & preprocessing
+* **NLTK & TextBlob** → Tokenization, lemmatization, spelling correction
+* **LangChain** → Prompt engineering & orchestration
+* **Hugging Face Hub** → Pre-trained LLM (meta-llama/Llama-3.1-8B-Instruct)
+* **Napkin.ai** → Visual flowchart for workflow illustration
+
+---
+
+## 🎯 Key Takeaways
+
+* Even simple **prompt changes** can drastically affect model outputs.
+* Role-playing prompts may **introduce bias or hallucination** in classification tasks.
+* Clean preprocessing and controlled prompt strategies lead to more **reliable sentiment predictions**.
+
+---
+
+## 📜 License
+
+This project is licensed under the terms of the [MIT License](LICENSE).
+
+---
+
+✨ *A spooky dataset, a haunted model, and a few tricks of NLP sorcery later — we learned how fragile and fascinating prompt-based sentiment analysis can be.* 👻
+
+---
+
+Would you like me to also **add sample code snippets** (like `app.py` execution or template creation) in the README so it looks even more hands-on for reviewers?
