@@ -1,0 +1,15 @@
+{
+    "name": null,
+    "input_variables": [
+        "review_text"
+    ],
+    "optional_variables": [],
+    "output_parser": null,
+    "partial_variables": {},
+    "metadata": null,
+    "tags": null,
+    "template": "As a horror fan, is this a good or bad review? Review: '{review_text}'",
+    "template_format": "f-string",
+    "validate_template": false,
+    "_type": "prompt"
+}
