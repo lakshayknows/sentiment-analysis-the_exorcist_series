@@ -1,0 +1,15 @@
+{
+    "name": null,
+    "input_variables": [
+        "review_text"
+    ],
+    "optional_variables": [],
+    "output_parser": null,
+    "partial_variables": {},
+    "metadata": null,
+    "tags": null,
+    "template": "You are analyzing sentiment in movie reviews. Below are labeled examples:\n\nExample 1: 'This movie was terrifying but brilliant.' \u2192 POSITIVE\nExample 2: 'Too slow and boring, not scary at all.' \u2192 NEGATIVE\nExample 3: 'Decent film, but not as good as the original.' \u2192 NEUTRAL\n\nNow classify the following review:\n\nReview: {review_text}\n\nSentiment:",
+    "template_format": "f-string",
+    "validate_template": false,
+    "_type": "prompt"
+}
