@@ -1,70 +1,78 @@
-# 🎬 Sentiment Analysis of *The Exorcist* Series Reviews
+🎬 Sentiment Analysis of The Exorcist Series Reviews
 
-**TL;DR:** An end-to-end NLP pipeline analyzing Rotten Tomatoes reviews of *The Exorcist*. Built with **LangChain + Hugging Face** to compare prompt strategies (direct vs. role-playing), showcasing how prompting affects model reliability.
+TL;DR: An end-to-end NLP pipeline analyzing Rotten Tomatoes reviews of The Exorcist. Built with LangChain + Hugging Face to compare prompt strategies (direct, role-playing, and few-shot), showcasing how prompting affects model reliability.
 
----
+🖼️ Project Workflow
 
-## 🖼️ Project Workflow
 
-![Flowchart](docs/flowchart.png)
-*(see [`docs/NLP Analysis of _The Exorcist_ Series Reviews.pdf`](docs/NLP%20Analysis%20of%20_The%20Exorcist_%20Series%20Reviews.pdf) for full detail)*
+(see docs/NLP Analysis of _The Exorcist_ Series Reviews.pdf
+ for full detail)
 
----
-
-## 📂 Repository Structure
-
-```
+📂 Repository Structure
 .
 ├── preprocessing/                     # Notebooks for scraping & cleaning
+│   ├── web-scraping-movie-reviews.ipynb
+│   └── sentiment-analysis-of-the-exorcist-reviews.ipynb
+│
 ├── src/                               # Core Python scripts
+│   ├── app.py
+│   ├── main.py
+│   ├── data.py
+│   └── create_template.py
+│
 ├── templates/                         # Prompt templates
+│   ├── template_1.json   # Direct
+│   ├── template_2.json   # Role-playing
+│   └── template_3.json   # Few-shot
+│
 ├── data/                              # Final dataset
+│   └── processed_data.csv
+│
 ├── docs/                              # Visuals & reports
+│   ├── NLP Analysis of _The Exorcist_ Series Reviews.pdf
+│   └── flowchart.png
+│
 ├── requirements.txt
 ├── README.md
 └── LICENSE
-```
 
----
+🕸️ Data Collection & Preprocessing
 
-## 🕸️ Data Collection & Preprocessing
+Notebooks inside preprocessing/
+:
 
-Notebooks inside [`preprocessing/`](preprocessing):
+web-scraping-movie-reviews.ipynb → Scrapes The Exorcist reviews from Rotten Tomatoes.
 
-* **`web-scraping-movie-reviews.ipynb`** → Scrapes *The Exorcist* reviews from Rotten Tomatoes.
-* **`sentiment-analysis-of-the-exorcist-reviews.ipynb`** → Cleans and preprocesses the raw text (lowercasing, stopwords, punctuation, tokenization, lemmatization).
+sentiment-analysis-of-the-exorcist-reviews.ipynb → Cleans and preprocesses the raw text (lowercasing, stopwords, punctuation, tokenization, lemmatization).
 
-Final output: `data/processed_data.csv`
+Final output: data/processed_data.csv
 
----
+⚙️ Workflow
 
-## ⚙️ Workflow
+Scraping → Collect reviews from Rotten Tomatoes.
 
-1. **Scraping** → Collect reviews from Rotten Tomatoes.
-2. **Preprocessing** → Clean & normalize text.
-3. **Prompt Engineering** → Two strategies:
+Preprocessing → Clean & normalize text.
 
-   * Direct prompt (concise).
-   * Role-playing prompt (persona-based).
-4. **Model Interaction** → Hugging Face LLM: `meta-llama/Llama-3.1-8B-Instruct`.
-5. **Evaluation & Troubleshooting** → Compare outputs, document errors, assess hallucinations.
+Prompt Engineering → Three strategies:
 
----
+Direct prompt (concise).
 
-## 💻 Example Code
+Role-playing prompt (persona-based).
 
-### Preprocessing (`src/data.py`)
+Few-shot prompt (anchored with labeled examples).
 
-```python
+Model Interaction → Hugging Face LLM: meta-llama/Llama-3.1-8B-Instruct.
+
+Evaluation & Troubleshooting → Compare outputs, document errors, assess hallucinations.
+
+💻 Example Code
+Preprocessing (src/data.py)
 import pandas as pd
-def load_data ():
-    data = pd.read_csv("processed_data.csv")
+def load_data():
+    data = pd.read_csv("data/processed_data.csv")
     return data
-```
 
-### Sentiment Inference (`src/main.py`)
-
-```python
+Sentiment Inference (src/main.py)
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 from dotenv import load_dotenv
 from data import load_data
@@ -74,113 +82,110 @@ from langchain_core.prompts import load_prompt
 load_dotenv()
 data = load_data()
 
-# Model from hf
+# Model from Hugging Face
 llm = HuggingFaceEndpoint(
     repo_id="meta-llama/Llama-3.1-8B-Instruct",
     task="text-generation"
 )
 model = ChatHuggingFace(llm=llm)
-# Loading prompts
-prompt1 = load_prompt('template_1.json')
-prompt2 = load_prompt('template_2.json')
 
+# Load prompt templates
+prompt1 = load_prompt('templates/template_1.json')
+prompt2 = load_prompt('templates/template_2.json')
+prompt3 = load_prompt('templates/template_3.json')
 
 sample_review = data['flat_reviews'].iloc[0]
 
+print(f"Review: '{sample_review}'")
+print("-" * 40)
 
+# Direct Prompt
 chain1 = prompt1 | model
 result1 = chain1.invoke({"review_text": sample_review})
-
-print(f"Review: '{sample_review}'")
-print("-" * 25)
-print(f"Result from Prompt 1 (Direct):")
+print("\nResult from Prompt 1 (Direct):")
 print(result1.content)
 
-
-
+# Role-Playing Prompt
 chain2 = prompt2 | model
 result2 = chain2.invoke({"review_text": sample_review})
-
-print(f"\nResult from Prompt 2 (Role-Playing):")
+print("\nResult from Prompt 2 (Role-Playing):")
 print(result2.content)
-```
 
----
+# Few-Shot Prompt
+chain3 = prompt3 | model
+result3 = chain3.invoke({"review_text": sample_review})
+print("\nResult from Prompt 3 (Few-Shot):")
+print(result3.content)
 
-## 📊 Example Output
+📊 Example Output
 
-**Sample Review:**
+Sample Review:
 
-```
 "brings,back,,original,horror,,73"
-```
 
-* **Direct Prompt** ✅
 
-  ```
-  Sentiment: POSITIVE
-  Reason: Nostalgic reference to “original horror” implies enthusiasm.
-  ```
+Direct Prompt ✅
 
-* **Role-Playing Prompt** ❌
+Sentiment: POSITIVE
+Reason: Nostalgic reference to “original horror” implies enthusiasm.
 
-  ```
-  Sentiment: NEGATIVE
-  Reason: Over-interpreted punctuation → hallucinated disappointment.
-  ```
 
-👉 Demonstrates how **prompt design directly impacts LLM reliability**.
+Role-Playing Prompt ❌
 
----
+Sentiment: NEGATIVE
+Reason: Over-interpreted punctuation → hallucinated disappointment.
 
-## 🚀 How to Run
 
-```bash
+Few-Shot Prompt ✅
+
+Sentiment: POSITIVE
+Reason: Anchored by examples, the model avoids over-interpretation and classifies correctly.
+
+
+👉 Demonstrates how prompt design directly impacts LLM reliability.
+
+🚀 How to Run
 git clone https://github.com/lakshayknows/sentiment-analysis-the_exorcist_series.git
 cd sentiment-analysis-the_exorcist_series
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
 
-Add Hugging Face API token in `.env`:
 
-```ini
+Add Hugging Face API token in .env:
+
 HUGGINGFACEHUB_API_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
-```
+
 
 Run:
 
-```bash
-python src/app.py
-```
+python src/main.py
 
----
+🛠️ Tools & Libraries
 
-## 🛠️ Tools & Libraries
+Python
 
-* **Python**
-* **pandas, NLTK, TextBlob** → preprocessing
-* **LangChain** → prompt orchestration
-* **Hugging Face Hub** → meta-llama LLM
-* **Napkin.ai** → flowchart design
+pandas, NLTK, TextBlob → preprocessing
 
----
+LangChain → prompt orchestration
 
-## 🎯 Key Takeaways
+Hugging Face Hub → meta-llama LLM
 
-* Direct prompts → **stable results**
-* Persona prompts → **risk of hallucinations**
-* Preprocessing + prompt strategy → **better reliability**
+Napkin.ai → flowchart design
 
----
+🎯 Key Takeaways
 
-## 📜 License
+Direct prompts → stable results
 
-Licensed under the [MIT License](LICENSE).
+Persona prompts → risk of hallucinations
 
----
+Few-shot prompts → reduce hallucinations, improve reliability
 
-✨ *From raw web-scraped chaos to model-guided clarity — an exorcism of noisy data into sentiment truth.* 👻
+Preprocessing + prompt strategy → robust sentiment classification
 
----
+📜 License
+
+Licensed under the MIT License
+.
+
+✨ From raw web-scraped chaos to model-guided clarity — an exorcism of noisy data into sentiment truth. 👻
