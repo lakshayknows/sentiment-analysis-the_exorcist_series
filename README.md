@@ -184,5 +184,3 @@ Licensed under the [MIT License](LICENSE).
 ✨ *From raw web-scraped chaos to model-guided clarity — an exorcism of noisy data into sentiment truth.* 👻
 
 ---
-
-Would you like me to also **generate the new folder structure + move commands** (bash `mkdir`, `mv`) so you can reorganize your repo quickly without doing it manually in GitHub?
