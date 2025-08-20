@@ -1,4 +1,10 @@
-Sentiment Analysis of "The Exorcist" Series ReviewsThis project is a submission for an NLP internship assignment. It demonstrates a complete, end-to-end workflow for a sentiment analysis task, including data scraping, extensive preprocessing, and prompt engineering with LangChain to interact with a large language model from the Hugging Face Hub.The primary submission is a visual flowchart that details the project's lifecycle, accompanied by this repository containing all the source code and documentation.📂 Repository Structure.
+Sentiment Analysis of "The Exorcist" Series Reviews
+This project is a submission for an NLP internship assignment. It demonstrates a complete, end-to-end workflow for a sentiment analysis task, including data scraping, extensive preprocessing, and prompt engineering with LangChain to interact with a large language model from the Hugging Face Hub.
+
+The primary submission is a visual flowchart that details the project's lifecycle, accompanied by this repository containing all the source code and documentation.
+
+📂 Repository Structure
+.
 ├── .gitignore
 ├── LICENSE
 ├── README.md
@@ -11,7 +17,29 @@ Sentiment Analysis of "The Exorcist" Series ReviewsThis project is a submission 
 ├── template_2.json
 ├── flowchart.pdf
 └── evaluation_and_troubleshooting.md
-app.py: The main application script that loads the processed data and prompt templates, interacts with the Hugging Face model, and prints the final sentiment analysis results.data.py: A utility script responsible for loading the raw review data and applying all preprocessing steps.create_templates.py: A helper script to generate and save the LangChain PromptTemplate objects into reusable JSON files.processed_data.csv: The final, cleaned, and lemmatized dataset that is used as the input for the main application.template_1.json & template_2.json: The saved prompt templates that define the different interaction strategies with the language model.requirements.txt: A list of all the Python libraries required to run this project.flowchart.pdf: The main visual submission detailing the project workflow from start to finish.evaluation_and_troubleshooting.md: A document containing the detailed written analysis for steps 3 (Evaluation) and 4 (Troubleshooting) of the assignment.📊 Final Output AnalysisThe script was run on a sample review from the processed dataset to demonstrate how different prompting strategies can lead to vastly different interpretations and outputs from the same model (meta-llama/Llama-3.1-8B-Instruct).Sample Review: 'brings,back,,original,horror,,73'-------------------------
+
+app.py: The main application script that loads the processed data and prompt templates, interacts with the Hugging Face model, and prints the final sentiment analysis results.
+
+data.py: A utility script responsible for loading the raw review data and applying all preprocessing steps.
+
+create_templates.py: A helper script to generate and save the LangChain PromptTemplate objects into reusable JSON files.
+
+processed_data.csv: The final, cleaned, and lemmatized dataset that is used as the input for the main application.
+
+template_1.json & template_2.json: The saved prompt templates that define the different interaction strategies with the language model.
+
+requirements.txt: A list of all the Python libraries required to run this project.
+
+flowchart.pdf: The main visual submission detailing the project workflow from start to finish.
+
+evaluation_and_troubleshooting.md: A document containing the detailed written analysis for steps 3 (Evaluation) and 4 (Troubleshooting) of the assignment.
+
+📊 Final Output Analysis
+The script was run on a sample review from the processed dataset to demonstrate how different prompting strategies can lead to vastly different interpretations and outputs from the same model (meta-llama/Llama-3.1-8B-Instruct).
+
+Sample Review: 'brings,back,,original,horror,,73'
+
+-------------------------
 Result from Prompt 1 (Direct):
 A very brief review!
 
@@ -30,11 +58,40 @@ After some analysis, I'd say this is a BAD review. Here's why:
 * The lack of descriptive language or specific criticisms makes the review feel vague and unhelpful.
 
 Overall, this review seems to suggest that the reviewer was disappointed or underwhelmed by the movie, but they're not providing any concrete reasons why.
-This output clearly shows that the direct prompt led to a correct interpretation, while the more complex persona prompt caused the model to "hallucinate" incorrect reasoning, resulting in a failed classification.🚀 How to Run1. Clone the Repositorygit clone <your-repository-url>
+
+This output clearly shows that the direct prompt led to a correct interpretation, while the more complex persona prompt caused the model to "hallucinate" incorrect reasoning, resulting in a failed classification.
+
+🚀 How to Run
+1. Clone the Repository
+git clone <your-repository-url>
 cd <your-repository-name>
-2. Set Up a Virtual Environment (Recommended)python -m venv venv
+
+2. Set Up a Virtual Environment (Recommended)
+python -m venv venv
 source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-3. Install Dependenciespip install -r requirements.txt
-4. Set Up Environment VariablesCreate a .env file in the root directory and add your Hugging Face API token:HUGGINGFACEHUB_API_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
-5. Run the ApplicationExecute the main script to see the sentiment analysis in action:python app.py
-🛠️ Tools and Libraries UsedPythonPandas: For data manipulation and preprocessing.NLTK & TextBlob: For NLP cleaning tasks like tokenization, lemmatization, and spelling correction.LangChain: For orchestrating the interaction with the language model and managing prompts.Hugging Face Hub: For accessing the pre-trained language model.Napkin.ai: Used to create the visual flowchart for the final submission.
+
+3. Install Dependencies
+pip install -r requirements.txt
+
+4. Set Up Environment Variables
+Create a .env file in the root directory and add your Hugging Face API token:
+
+HUGGINGFACEHUB_API_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
+
+5. Run the Application
+Execute the main script to see the sentiment analysis in action:
+
+python app.py
+
+🛠️ Tools and Libraries Used
+Python
+
+Pandas: For data manipulation and preprocessing.
+
+NLTK & TextBlob: For NLP cleaning tasks like tokenization, lemmatization, and spelling correction.
+
+LangChain: For orchestrating the interaction with the language model and managing prompts.
+
+Hugging Face Hub: For accessing the pre-trained language model.
+
+Napkin.ai: Used to create the visual flowchart for the final submission.
