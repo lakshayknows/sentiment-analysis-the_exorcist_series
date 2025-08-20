@@ -1,14 +1,19 @@
-🎬 Sentiment Analysis of The Exorcist Series Reviews
+# 🎬 Sentiment Analysis of *The Exorcist* Series Reviews
 
-TL;DR: An end-to-end NLP pipeline analyzing Rotten Tomatoes reviews of The Exorcist. Built with LangChain + Hugging Face to compare prompt strategies (direct, role-playing, and few-shot), showcasing how prompting affects model reliability.
+**TL;DR:** An end-to-end NLP pipeline analyzing Rotten Tomatoes reviews of *The Exorcist*. Built with **LangChain + Hugging Face** to compare prompt strategies (direct, role-playing, and few-shot), showcasing how prompting affects model reliability.
 
-🖼️ Project Workflow
+---
 
+## 🖼️ Project Workflow
 
-(see docs/NLP Analysis of _The Exorcist_ Series Reviews.pdf
- for full detail)
+![Flowchart](docs/flowchart.png)
+*(see [`docs/NLP Analysis of _The Exorcist_ Series Reviews.pdf`](docs/NLP%20Analysis%20of%20_The%20Exorcist_%20Series%20Reviews.pdf) for full detail)*
 
-📂 Repository Structure
+---
+
+## 📂 Repository Structure
+
+```
 .
 ├── preprocessing/                     # Notebooks for scraping & cleaning
 │   ├── web-scraping-movie-reviews.ipynb
@@ -35,44 +40,49 @@ TL;DR: An end-to-end NLP pipeline analyzing Rotten Tomatoes reviews of The Exorc
 ├── requirements.txt
 ├── README.md
 └── LICENSE
+```
 
-🕸️ Data Collection & Preprocessing
+---
 
-Notebooks inside preprocessing/
-:
+## 🕸️ Data Collection & Preprocessing
 
-web-scraping-movie-reviews.ipynb → Scrapes The Exorcist reviews from Rotten Tomatoes.
+Notebooks inside [`preprocessing/`](preprocessing):
 
-sentiment-analysis-of-the-exorcist-reviews.ipynb → Cleans and preprocesses the raw text (lowercasing, stopwords, punctuation, tokenization, lemmatization).
+* **`web-scraping-movie-reviews.ipynb`** → Scrapes *The Exorcist* reviews from Rotten Tomatoes.
+* **`sentiment-analysis-of-the-exorcist-reviews.ipynb`** → Cleans and preprocesses the raw text (lowercasing, stopwords, punctuation, tokenization, lemmatization).
 
-Final output: data/processed_data.csv
+Final output: `data/processed_data.csv`
 
-⚙️ Workflow
+---
 
-Scraping → Collect reviews from Rotten Tomatoes.
+## ⚙️ Workflow
 
-Preprocessing → Clean & normalize text.
+1. **Scraping** → Collect reviews from Rotten Tomatoes.
+2. **Preprocessing** → Clean & normalize text.
+3. **Prompt Engineering** → Three strategies:
 
-Prompt Engineering → Three strategies:
+   * Direct prompt (concise).
+   * Role-playing prompt (persona-based).
+   * Few-shot prompt (anchored with labeled examples).
+4. **Model Interaction** → Hugging Face LLM: `meta-llama/Llama-3.1-8B-Instruct`.
+5. **Evaluation & Troubleshooting** → Compare outputs, document errors, assess hallucinations.
 
-Direct prompt (concise).
+---
 
-Role-playing prompt (persona-based).
+## 💻 Example Code
 
-Few-shot prompt (anchored with labeled examples).
+### Preprocessing (`src/data.py`)
 
-Model Interaction → Hugging Face LLM: meta-llama/Llama-3.1-8B-Instruct.
-
-Evaluation & Troubleshooting → Compare outputs, document errors, assess hallucinations.
-
-💻 Example Code
-Preprocessing (src/data.py)
+```python
 import pandas as pd
 def load_data():
     data = pd.read_csv("data/processed_data.csv")
     return data
+```
 
-Sentiment Inference (src/main.py)
+### Sentiment Inference (`src/main.py`)
+
+```python
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 from dotenv import load_dotenv
 from data import load_data
@@ -116,76 +126,92 @@ chain3 = prompt3 | model
 result3 = chain3.invoke({"review_text": sample_review})
 print("\nResult from Prompt 3 (Few-Shot):")
 print(result3.content)
+```
 
-📊 Example Output
+---
 
-Sample Review:
+## 📊 Example Output
 
+**Sample Review:**
+
+```
 "brings,back,,original,horror,,73"
+```
 
+* **Direct Prompt** ✅
 
-Direct Prompt ✅
+  ```
+  Sentiment: POSITIVE
+  Reason: Nostalgic reference to “original horror” implies enthusiasm.
+  ```
 
-Sentiment: POSITIVE
-Reason: Nostalgic reference to “original horror” implies enthusiasm.
+* **Role-Playing Prompt** ❌
 
+  ```
+  Sentiment: NEGATIVE
+  Reason: Over-interpreted punctuation → hallucinated disappointment.
+  ```
 
-Role-Playing Prompt ❌
+* **Few-Shot Prompt** ✅
 
-Sentiment: NEGATIVE
-Reason: Over-interpreted punctuation → hallucinated disappointment.
+  ```
+  Sentiment: POSITIVE
+  Reason: Anchored by examples, the model avoids over-interpretation and classifies correctly.
+  ```
 
+👉 Demonstrates how **prompt design directly impacts LLM reliability**.
 
-Few-Shot Prompt ✅
+---
 
-Sentiment: POSITIVE
-Reason: Anchored by examples, the model avoids over-interpretation and classifies correctly.
+## 🚀 How to Run
 
-
-👉 Demonstrates how prompt design directly impacts LLM reliability.
-
-🚀 How to Run
+```bash
 git clone https://github.com/lakshayknows/sentiment-analysis-the_exorcist_series.git
 cd sentiment-analysis-the_exorcist_series
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
+```
 
+Add Hugging Face API token in `.env`:
 
-Add Hugging Face API token in .env:
-
+```ini
 HUGGINGFACEHUB_API_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
-
+```
 
 Run:
 
+```bash
 python src/main.py
+```
 
-🛠️ Tools & Libraries
+---
 
-Python
+## 🛠️ Tools & Libraries
 
-pandas, NLTK, TextBlob → preprocessing
+* **Python**
+* **pandas, NLTK, TextBlob** → preprocessing
+* **LangChain** → prompt orchestration
+* **Hugging Face Hub** → meta-llama LLM
+* **Napkin.ai** → flowchart design
 
-LangChain → prompt orchestration
+---
 
-Hugging Face Hub → meta-llama LLM
+## 🎯 Key Takeaways
 
-Napkin.ai → flowchart design
+* Direct prompts → **stable results**
+* Persona prompts → **risk of hallucinations**
+* Few-shot prompts → **reduce hallucinations, improve reliability**
+* Preprocessing + prompt strategy → **robust sentiment classification**
 
-🎯 Key Takeaways
+---
 
-Direct prompts → stable results
+## 📜 License
 
-Persona prompts → risk of hallucinations
+Licensed under the [MIT License](LICENSE).
 
-Few-shot prompts → reduce hallucinations, improve reliability
+---
 
-Preprocessing + prompt strategy → robust sentiment classification
+✨ *From raw web-scraped chaos to model-guided clarity — an exorcism of noisy data into sentiment truth.* 👻
 
-📜 License
-
-Licensed under the MIT License
-.
-
-✨ From raw web-scraped chaos to model-guided clarity — an exorcism of noisy data into sentiment truth. 👻
+---
