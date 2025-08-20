@@ -6,7 +6,7 @@
 
 ## 🖼️ Project Workflow
 
-![Flowchart](docs/flowchart.png)
+![Flowchart]
 *(see [`docs/NLP Analysis of _The Exorcist_ Series Reviews.pdf`](docs/NLP%20Analysis%20of%20_The%20Exorcist_%20Series%20Reviews.pdf) for full detail)*
 
 ---
@@ -16,11 +16,10 @@
 ```
 .
 ├── preprocessing/                     # Notebooks for scraping & cleaning
-│   ├── web-scraping-movie-reviews.ipynb
-│   └── sentiment-analysis-of-the-exorcist-reviews.ipynb
+│   ├── sentiment-analysis-of-the-exorcist-reviews.ipynb
+│   └── web-scraping-movie-reviews.ipynb
 │
 ├── src/                               # Core Python scripts
-│   ├── app.py
 │   ├── main.py
 │   ├── data.py
 │   └── create_template.py
@@ -34,9 +33,10 @@
 │   └── processed_data.csv
 │
 ├── docs/                              # Visuals & reports
-│   ├── NLP Analysis of _The Exorcist_ Series Reviews.pdf
-│   └── flowchart.png
+│   ├── Model Evaluation and TroubleShooting.pdf
+│   └── NLP Analysis of _The Exorcist_ Series Reviews.pdf
 │
+├── .gitignore
 ├── requirements.txt
 ├── README.md
 └── LICENSE
